@@ -47,6 +47,15 @@ public class ArtistController {
 		return "redirect:/artists";
 	}
 
+	//指定されたIDのアーティストを更新する
+	@GetMapping("/artists/{id}")
+	public String update(@PathVariable("id") Integer artistId, Model model) {
+		var artists = artistService.findAll();
+		model.addAttribute("artists", artists);
+		model.addAttribute("title", "アーティスト更新");
+		return "updateArtist";
+	}
+
 	//アーティスト登録画面の表示
 	@GetMapping("/artists/registration")
 	public String registrationArtists(Model model) {
@@ -55,7 +64,7 @@ public class ArtistController {
 		return "registration";
 	}
 
-	//フォームから送信されたアーティスト情報を登録
+	//フォームから送信されたアーティスト情報を保存
 	@PostMapping("/artists")
 	public String registerArtist(@ModelAttribute @Valid Artist artist, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
@@ -79,7 +88,8 @@ public class ArtistController {
 
 	//メンバー登録
 	@PostMapping("/members")
-	public String registerMember(@ModelAttribute @Valid Member member, BindingResult bindingResult, Model model) {
+	public String registerMember(@ModelAttribute @Valid Member member,
+			BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("artists", artistService.findAll());
 			return "registrationMember";
