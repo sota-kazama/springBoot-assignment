@@ -1,47 +1,46 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="ja">
 <head>
 	<meta charset="UTF-8">
+	<title>アーティスト新規登録</title>
 	<link th:href="@{/webjars/bootstrap/5.3.5/css/bootstrap.min.css}" rel="stylesheet" />
 	<link th:href="@{/css/app.css}" rel="stylesheet" />
 	<script th:src="@{/webjars/bootstrap/5.3.5/js/bootstrap.bundle.min.js}" defer></script>
 	<script th:src="@{/js/app.js}" defer></script>
-	<title>$title$</title>
 </head>
-
 <body>
 	<div class="container mt-5">
-		<h1>アーティスト新規登録</h1>
-		<form method="post" th:action="@{/artists}" th:object="${artist}">
-			<div>
-				アーティスト名<br>
-				<input type="text" th:field="*{artistName}" />
-				<div th:if="${#fields.hasErrors('artistName')}" th:errors="*{artistName}" class="text-danger"></div>
+		<h1 class="text-center mb-4">アーティスト新規登録</h1>
+
+		<form method="post" th:action="@{/artists}" th:object="${artist}" enctype="multipart/form-data" class="mx-auto" style="max-width: 600px;">
+			<div class="mb-3">
+				<label for="artistName" class="form-label">アーティスト名</label>
+				<input type="text" th:field="*{artistName}" id="artistName" class="form-control" />
+				<div th:if="${#fields.hasErrors('artistName')}" th:errors="*{artistName}" class="form-text text-danger"></div>
 			</div>
 
-			<div>
-				アーティスト名(読み)<br>
-				<input type="text" th:field="*{artistHiraganaName}" />
-				<div th:if="${#fields.hasErrors('artistHiraganaName')}" th:errors="*{artistHiraganaName}"
-					class="text-danger"></div>
+			<div class="mb-3">
+				<label for="artistHiraganaName" class="form-label">アーティスト名(読み)</label>
+				<input type="text" th:field="*{artistHiraganaName}" id="artistHiraganaName" class="form-control" />
+				<div th:if="${#fields.hasErrors('artistHiraganaName')}" th:errors="*{artistHiraganaName}" class="form-text text-danger"></div>
 			</div>
 
-			<div>
-				公式HP<br>
-				<input type="text" th:field="*{artistArtUrl}" />
+			<div class="mb-3">
+				<label for="artistArtUrl" class="form-label">公式HP</label>
+				<input type="text" th:field="*{artistArtUrl}" id="artistArtUrl" class="form-control" />
 			</div>
 
-			<div>
-				アーティスト画像<br>
-				<input type="file" class="form-control-file" id="inputFile" name="artistPhoto" />
+			<div class="mb-3">
+				<label for="inputFile" class="form-label">アーティスト画像</label>
+				<input type="file" class="form-control" id="inputFile" name="artistPhoto" />
 			</div>
 
 			<input type="hidden" th:field="*{artistId}" />
-			<br>
-			<input type="submit" class="btn btn-secondary" value="登録する" />
+
+			<div class="text-center">
+				<button type="submit" class="btn btn-primary">登録する</button>
+			</div>
 		</form>
-
+	</div>
 </body>
-
 </html>

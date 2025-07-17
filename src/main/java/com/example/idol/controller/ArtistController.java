@@ -50,9 +50,11 @@ public class ArtistController {
 	//指定されたIDのアーティストを更新する
 	@GetMapping("/artists/{id}")
 	public String update(@PathVariable("id") Integer artistId, Model model) {
-		var artists = artistService.findAll();
-		model.addAttribute("artists", artists);
+		var artist = artistService.findById(artistId);
+		artist.setArtistId(artist.getArtistId());
+		model.addAttribute("artist", artist);
 		model.addAttribute("title", "アーティスト更新");
+
 		return "updateArtist";
 	}
 
@@ -68,13 +70,34 @@ public class ArtistController {
 	@PostMapping("/artists")
 	public String registerArtist(@ModelAttribute @Valid Artist artist, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {
-			// バリデーションエラー時は入力画面に戻してエラー情報を表示
 			model.addAttribute("title", "アーティスト新規登録");
-			return "registration"; // リダイレクトではなくテンプレート名を返す
+			return "registration";
 		}
-		artistService.save(artist);
-		return "redirect:/artists";
+		return saveArtist(artist);
 	}
+	
+	@PostMapping("/artists/{id}")
+	public String updateArtist(@PathVariable("id") Integer artistId, @ModelAttribute @Valid Artist artist, BindingResult bindingResult, Model model) {
+	    if (bindingResult.hasErrors()) {
+	        model.addAttribute("title", "アーティスト更新");
+	        model.addAttribute("artist", artist);
+	        return "updateArtist";
+	    }
+	    Artist existingArtist = artistService.findById(artist.getArtistId());
+	    existingArtist.setArtistName(artist.getArtistName());
+        existingArtist.setArtistHiraganaName(artist.getArtistHiraganaName());
+        existingArtist.setArtistArtUrl(artist.getArtistArtUrl());
+
+        // 更新したArtistを保存
+        artistService.save(existingArtist);
+	    return "redirect:/artists";
+	}
+	
+	public String saveArtist(@ModelAttribute Artist artist) {
+		artistService.save(artist);
+	    return "redirect:/artists";
+	}
+
 
 	//メンバー登録画面の表示
 	@GetMapping("/artists/registrationMember")

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 
 <head>
 	<meta charset="UTF-8">
@@ -11,20 +11,25 @@
 </head>
 
 <body>
-	<table border="1" class="table">
-		<tr>
-			<th>メンバー名</th>
-			<th>メンバー名(読み)</th>
-			<th>誕生日</th>
-		</tr>
-		<tr th:each="member : ${artist.members}">
-			<td th:text="${member.memberName} + ' (' + ${member.memberAge} + ')'"></td>
-			<td th:text="${member.memberHiraganaName}"></td>
-			<td th:text="${member.memberBirthday}"></td>
-
-		</tr>
-
-	</table>
+	<div class="container mt-5">
+		<h2 class="mb-4">メンバー一覧</h2>
+		<table class="table table-striped table-hover table-bordered">
+			<thead class="table-dark">
+				<tr>
+					<th>メンバー名</th>
+					<th>メンバー名(読み)</th>
+					<th>誕生日</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="member : ${artist.members}">
+					<td th:text="${member.memberName} + ' (' + ${member.memberAge} + ')'"></td>
+					<td th:text="${member.memberHiraganaName}"></td>
+					<td th:text="${member.memberBirthday}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </body>
 
 </html>
