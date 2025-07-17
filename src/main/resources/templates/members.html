@@ -19,15 +19,23 @@
 					<th>メンバー名</th>
 					<th>メンバー名(読み)</th>
 					<th>誕生日</th>
+					<th>更新</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="member : ${artist.members}">
-					<td th:text="${member.memberName} + ' (' + ${member.memberAge} + ')'"></td>
+					<td th:text="|${member.memberName} (${member.memberAge})|"></td>
 					<td th:text="${member.memberHiraganaName}"></td>
 					<td th:text="${member.memberBirthday}"></td>
+					<td style="text-align: center;">
+						<form th:method="get" th:action="@{/member/{id}(id=${member.memberId})}">
+							<input type="hidden" name="id" th:value="${member.memberId}" />
+							<input type="submit" class="btn btn-secondary" value="更新" />
+						</form>
+					</td>
 				</tr>
 			</tbody>
+
 		</table>
 	</div>
 </body>

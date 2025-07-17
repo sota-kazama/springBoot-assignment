@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title th:text="${title}">メンバー情報更新</title>
+	<link th:href="@{/webjars/bootstrap/5.3.5/css/bootstrap.min.css}" rel="stylesheet" />
+	<link th:href="@{/css/app.css}" rel="stylesheet" />
+	<script th:src="@{/webjars/bootstrap/5.3.5/js/bootstrap.bundle.min.js}" defer></script>
+	<script th:src="@{/js/app.js}" defer></script>
+</head>
+
+<body>
+	<div class="container mt-5">
+		<h1 class="text-center mb-4">メンバー情報更新</h1>
+
+		<form method="post" th:action="@{/members}" th:object="${member}" class="mx-auto" style="max-width: 600px;">
+			
+			<input type="hidden" th:field="*{memberId}" />
+
+			<div class="mb-3">
+				<label for="memberName" class="form-label">メンバー名</label>
+				<input type="text" th:field="*{memberName}" id="memberName" class="form-control" />
+				<div th:if="${#fields.hasErrors('memberName')}" th:errors="*{memberName}" class="form-text text-danger"></div>
+			</div>
+
+			<div class="mb-3">
+				<label for="memberHiraganaName" class="form-label">メンバー名(読み)</label>
+				<input type="text" th:field="*{memberHiraganaName}" id="memberHiraganaName" class="form-control" />
+				<div th:if="${#fields.hasErrors('memberHiraganaName')}" th:errors="*{memberHiraganaName}" class="form-text text-danger"></div>
+			</div>
+
+			<div class="mb-3">
+				<label for="memberBirthday" class="form-label">誕生日</label>
+				<input type="date" th:field="*{memberBirthday}" id="memberBirthday" class="form-control" />
+				<div th:if="${#fields.hasErrors('memberBirthday')}" th:errors="*{memberBirthday}" class="form-text text-danger"></div>
+			</div>
+
+			<div class="mb-4">
+				<label for="artist" class="form-label">アーティスト</label>
+				<select th:field="*{artist.artistId}" class="form-select" id="artist">
+					<option value="" disabled selected>選択してください</option>
+					<option th:each="artist : ${artists}" th:value="${artist.artistId}" th:text="${artist.artistName}"></option>
+				</select>
+			</div>
+
+			
+
+			<div class="text-center">
+				<button type="submit" class="btn btn-primary">更新する</button>
+			</div>
+		</form>
+	</div>
+</body>
+</html>

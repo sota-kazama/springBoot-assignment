@@ -24,4 +24,8 @@ public class memberService {
 	public List<Member> findAll() {
 		return memberRepository.findAll();
 	}
+	
+	public Member findById(Integer memberId) {
+		return memberRepository.findById(memberId).orElseGet(Member::new);
+	}
 }
