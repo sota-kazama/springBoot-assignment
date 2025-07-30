@@ -1,5 +1,7 @@
+INSERT INTO ARTISTS(ARTIST_NAME, ARTIST_HIRAGANA_NAME, ARTIST_ART_URL, ARTIST_PHOTO) VALUES
+('乃木坂46','のぎざかふぉーてぃしっくす','https://nogizaka46.com', 'images/nogi_kv.jpg');
+
 INSERT INTO ARTISTS(ARTIST_NAME, ARTIST_HIRAGANA_NAME, ARTIST_ART_URL) VALUES
-('乃木坂46','のぎざかふぉーてぃしっくす','https://nogizaka46.com'),
 ('日向坂46','ひなたざかふぉーてぃしっくす','https://hinatazaka46.com'),
 ('櫻坂46','さくらざかふぉーてぃしっくす','https://sakurazaka46.com'),
 ('ももいろクローバーZ','ももいろくろーばーぜっと','https://www.momocho.net'),

@@ -29,8 +29,10 @@ public class Artist {
 
 	@NotBlank(message = "空要素は許可されていません")
 	private String artistHiraganaName;
-
+	
 	private String artistArtUrl;
+	
+	private String artistPhoto;
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "artistId")

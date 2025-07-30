@@ -12,7 +12,7 @@
 	<div class="container mt-5">
 		<h1 class="text-center mb-4">アーティスト更新フォーム</h1>
 		
-		<form th:action="@{'/artists/' + ${artist.artistId}}" th:object="${artist}" method="post" class="mx-auto" style="max-width: 600px;">
+		<form th:action="@{'/artists/' + ${artist.artistId}}" enctype="multipart/form-data" th:object="${artist}" method="post" class="mx-auto" style="max-width: 600px;">
 			<input type="hidden" th:field="*{artistId}" />
 
 			<div class="mb-3">
@@ -30,6 +30,11 @@
 			<div class="mb-3">
 				<label for="artistArtUrl" class="form-label">公式HP</label>
 				<input type="text" th:field="*{artistArtUrl}" class="form-control" id="artistArtUrl" />
+			</div>
+			
+			<div class="mb-3">
+				<label for="inputFile" class="form-label">アーティスト画像</label>
+				<input type="file" class="form-control" id="inputFile" name="artistCover" />
 			</div>
 
 			<div class="text-center">

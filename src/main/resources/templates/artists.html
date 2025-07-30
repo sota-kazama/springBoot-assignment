@@ -14,6 +14,7 @@
 	<div class="form-group">
 		<table border="1" class="table">
 			<tr>
+				<th>アーティスト画像</th>
 				<th>アーティスト名</th>
 				<th>アーティスト名(読み)</th>
 				<th>公式HP</th>
@@ -22,6 +23,12 @@
 				<th>更新</th>
 			</tr>
 			<tr th:each="artist: ${artists}">
+				<td>
+					<img th:src="@{'/' + ${artist.artistPhoto}}" style="width: 300px;">
+
+				</td>
+
+
 				<td th:text="${artist.artistName}"></td>
 				<td th:text="${artist.artistHiraganaName}"></td>
 				<td>
@@ -40,7 +47,7 @@
 						<input type="submit" class="btn btn-secondary" value="削除" />
 					</form>
 				</td>
-				
+
 				<td style="text-align: center;">
 					<form th:method="get" th:action="@{/artists/{id} (id=*{artist.artistId})}">
 						<input type="hidden" name="id" value="${artist.artistId}" />

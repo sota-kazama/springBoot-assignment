@@ -1,5 +1,6 @@
 package com.example.idol.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.idol.entity.Artist;
 import com.example.idol.service.ArtistService;
@@ -62,32 +65,34 @@ public class ArtistController {
 
 	// フォームから送信されたアーティスト情報を保存
 	@PostMapping("/artists")
-	public String registerArtist(@ModelAttribute @Valid Artist artist, BindingResult bindingResult, Model model) {
+	public String registerArtist(@ModelAttribute @Valid Artist artist, BindingResult bindingResult, Model model,
+			@RequestParam("artistCover") MultipartFile cover) throws IOException {
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("title", "アーティスト新規登録");
 			return "registration";
 		}
-		artistService.save(artist);
+		artistService.save(artist, cover);
 		return "redirect:/artists";
 	}
 
 	// フォームから送信されたアーティスト情報を更新
 	@PostMapping("/artists/{id}")
 	public String updateArtist(@PathVariable("id") Integer artistId, @ModelAttribute @Valid Artist artist,
-			BindingResult bindingResult, Model model) {
-		if (bindingResult.hasErrors()) {
-			model.addAttribute("title", "アーティスト更新");
-			model.addAttribute("artist", artist);
-			return "updateArtist";
-		}
-		Artist existingArtist = artistService.findById(artistId);
-		existingArtist.setArtistName(artist.getArtistName());
-		existingArtist.setArtistHiraganaName(artist.getArtistHiraganaName());
-		existingArtist.setArtistArtUrl(artist.getArtistArtUrl());
+	        BindingResult bindingResult, Model model ,@RequestParam("artistCover") MultipartFile cover) throws IOException {
+	    if (bindingResult.hasErrors()) {
+	        model.addAttribute("title", "アーティスト更新");
+	        model.addAttribute("artist", artist);
+	        return "updateArtist";
+	    }
+	    Artist existingArtist = artistService.findById(artistId);
+	    existingArtist.setArtistName(artist.getArtistName());
+	    existingArtist.setArtistHiraganaName(artist.getArtistHiraganaName());
+	    existingArtist.setArtistArtUrl(artist.getArtistArtUrl());
 
-		artistService.save(existingArtist);
-		return "redirect:/artists";
+	    artistService.save(existingArtist, cover);  // ここを修正
+	    return "redirect:/artists";
 	}
+
 
 	// 指定されたアーティストIDに紐づくメンバー一覧画面を表示する
 	@GetMapping("/artists/{id}/members")
