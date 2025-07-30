@@ -23,82 +23,92 @@ import jakarta.validation.Valid;
 @Controller
 public class ArtistController {
 
-	private final ArtistService artistService;
+    private final ArtistService artistService;
 
-	@Autowired
-	public ArtistController(ArtistService artistService) {
-		this.artistService = artistService;
-	}
+    @Autowired
+    public ArtistController(ArtistService artistService) {
+        this.artistService = artistService;
+    }
 
-	// アーティスト一覧画面の表示
-	@GetMapping("/artists")
-	public String getArtists(Model model) {
-		List<Artist> artists = artistService.findAll();
-		model.addAttribute("artists", artists);
-		model.addAttribute("title", "アーティスト一覧");
-		return "artists";
-	}
+    // アーティスト一覧画面の表示
+    @GetMapping("/artists")
+    public String getArtists(Model model) {
+        List<Artist> artists = artistService.findAll();
+        model.addAttribute("artists", artists);
+        model.addAttribute("title", "アーティスト一覧");
+        return "Artist/artists";  // フォルダ名を含める
+    }
 
-	// 指定されたIDのアーティストを削除する
-	@DeleteMapping("/artists/{id}")
-	public String delete(@PathVariable("id") Integer artistId) {
-		artistService.delete(artistId);
-		return "redirect:/artists";
-	}
+    // アーティスト削除
+    @DeleteMapping("/artists/{id}")
+    public String delete(@PathVariable("id") Integer artistId) {
+        artistService.delete(artistId);
+        return "redirect:/artists";
+    }
 
-	// 指定されたIDのアーティストを更新ページの表示
-	@GetMapping("/artists/{id}")
-	public String updateArtist(@PathVariable("id") Integer artistId, Model model) {
-		Artist artist = artistService.findById(artistId);
-		model.addAttribute("artist", artist);
-		model.addAttribute("title", "アーティスト更新");
-		return "updateArtist";
-	}
+    // アーティスト更新ページの表示
+    @GetMapping("/artists/{id}")
+    public String updateArtist(@PathVariable("id") Integer artistId, Model model) {
+        Artist artist = artistService.findById(artistId);
+        model.addAttribute("artist", artist);
+        model.addAttribute("title", "アーティスト更新");
+        return "Artist/updateArtist";  // フォルダ名を含める
+    }
 
-	// アーティスト登録画面の表示
-	@GetMapping("/artists/registration")
-	public String registrationArtists(Model model) {
-		model.addAttribute("artist", new Artist());
-		model.addAttribute("title", "アーティスト新規登録");
-		return "registration";
-	}
+    // アーティスト登録画面の表示
+    @GetMapping("/artists/registration")
+    public String registrationArtists(Model model) {
+        model.addAttribute("artist", new Artist());
+        model.addAttribute("title", "アーティスト新規登録");
+        return "Artist/registration";  // フォルダ名を含める
+    }
 
-	// フォームから送信されたアーティスト情報を保存
-	@PostMapping("/artists")
-	public String registerArtist(@ModelAttribute @Valid Artist artist, BindingResult bindingResult, Model model,
-			@RequestParam("artistCover") MultipartFile cover) throws IOException {
-		if (bindingResult.hasErrors()) {
-			model.addAttribute("title", "アーティスト新規登録");
-			return "registration";
-		}
-		artistService.save(artist, cover);
-		return "redirect:/artists";
-	}
+    // アーティスト登録処理
+    @PostMapping("/artists")
+    public String registerArtist(
+            @ModelAttribute @Valid Artist artist,
+            BindingResult bindingResult,
+            Model model,
+            @RequestParam("artistCover") MultipartFile cover) throws IOException {
 
-	// フォームから送信されたアーティスト情報を更新
-	@PostMapping("/artists/{id}")
-	public String updateArtist(@PathVariable("id") Integer artistId, @ModelAttribute @Valid Artist artist,
-	        BindingResult bindingResult, Model model ,@RequestParam("artistCover") MultipartFile cover) throws IOException {
-	    if (bindingResult.hasErrors()) {
-	        model.addAttribute("title", "アーティスト更新");
-	        model.addAttribute("artist", artist);
-	        return "updateArtist";
-	    }
-	    Artist existingArtist = artistService.findById(artistId);
-	    existingArtist.setArtistName(artist.getArtistName());
-	    existingArtist.setArtistHiraganaName(artist.getArtistHiraganaName());
-	    existingArtist.setArtistArtUrl(artist.getArtistArtUrl());
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("title", "アーティスト新規登録");
+            return "Artist/registration";  // フォルダ名を含める
+        }
 
-	    artistService.save(existingArtist, cover);  // ここを修正
-	    return "redirect:/artists";
-	}
+        artistService.save(artist, cover);
+        return "redirect:/artists";
+    }
 
+    // アーティスト更新処理
+    @PostMapping("/artists/{id}")
+    public String updateArtist(
+            @PathVariable("id") Integer artistId,
+            @ModelAttribute @Valid Artist artist,
+            BindingResult bindingResult,
+            Model model,
+            @RequestParam("artistCover") MultipartFile cover) throws IOException {
 
-	// 指定されたアーティストIDに紐づくメンバー一覧画面を表示する
-	@GetMapping("/artists/{id}/members")
-	public String getMembers(@PathVariable("id") Integer artistId, Model model) {
-		Artist artist = artistService.findById(artistId);
-		model.addAttribute("artist", artist);
-		return "members";
-	}
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("title", "アーティスト更新");
+            model.addAttribute("artist", artist);
+            return "Artist/updateArtist";  // フォルダ名を含める
+        }
+
+        Artist existingArtist = artistService.findById(artistId);
+        existingArtist.setArtistName(artist.getArtistName());
+        existingArtist.setArtistHiraganaName(artist.getArtistHiraganaName());
+        existingArtist.setArtistArtUrl(artist.getArtistArtUrl());
+
+        artistService.save(existingArtist, cover);
+        return "redirect:/artists";
+    }
+
+    // アーティストに紐づくメンバー一覧画面の表示
+    @GetMapping("/artists/{id}/members")
+    public String getMembers(@PathVariable("id") Integer artistId, Model model) {
+        Artist artist = artistService.findById(artistId);
+        model.addAttribute("artist", artist);
+        return "Member/members";  // Memberフォルダのmembers.htmlを指定
+    }
 }

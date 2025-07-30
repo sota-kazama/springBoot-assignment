@@ -9,23 +9,27 @@ import com.example.idol.entity.Member;
 import com.example.idol.repository.MemberRepository;
 
 @Service
-public class memberService {
-	private final MemberRepository memberRepository;
+public class MemberService {
 
-	@Autowired
-	public memberService(MemberRepository memberRepository) {
-		this.memberRepository = memberRepository;
-	}
+    private final MemberRepository memberRepository;
 
-	public void save(Member member) {
-		memberRepository.save(member);
-	}
+    @Autowired
+    public MemberService(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
 
-	public List<Member> findAll() {
-		return memberRepository.findAll();
-	}
-	
-	public Member findById(Integer memberId) {
-		return memberRepository.findById(memberId).orElseGet(Member::new);
-	}
+    // メンバー保存
+    public void save(Member member) {
+        memberRepository.save(member);
+    }
+
+    // 全メンバー取得
+    public List<Member> findAll() {
+        return memberRepository.findAll();
+    }
+
+    // IDでメンバー検索
+    public Member findById(Integer memberId) {
+        return memberRepository.findById(memberId).orElseGet(Member::new);
+    }
 }
