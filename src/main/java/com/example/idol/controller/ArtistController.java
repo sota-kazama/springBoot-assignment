@@ -35,6 +35,7 @@ public class ArtistController {
     public String getArtists(Model model) {
         List<Artist> artists = artistService.findAll();
         model.addAttribute("artists", artists);
+        
         model.addAttribute("title", "アーティスト一覧");
         return "Artist/artists";  // フォルダ名を含める
     }

@@ -36,16 +36,47 @@ public class ArtistService {
 	// アーティスト保存（画像含む）
 	public void save(Artist artist, MultipartFile file) throws IOException {
 		if (file != null && !file.isEmpty()) {
-			String fileName = file.getOriginalFilename();
-			String filePath = "images/" + fileName;
+			String originalFileName = file.getOriginalFilename();
+			String fileName = originalFileName;
 
-			artist.setArtistPhoto(filePath);
+			// 保存先ディレクトリ
+			Path directory = Paths.get("static/images");
+			if (!Files.exists(directory)) {
+				Files.createDirectories(directory); // ディレクトリがなければ作成
+			}
 
-			Path savePath = Paths.get("static/images/" + fileName);
+			Path savePath = directory.resolve(fileName);
+			int count = 1;
+
+			// 重複がある場合、ファイル名を変更していく（例: image(1).jpg）
+			while (Files.exists(savePath)) {
+				String nameWithoutExt = getFileNameWithoutExtension(originalFileName);
+				String extension = getFileExtension(originalFileName);
+				fileName = nameWithoutExt + "(" + count + ")." + extension;
+				savePath = directory.resolve(fileName);
+				count++;
+			}
+
+			// アーティストにファイルパスをセット
+			artist.setArtistPhoto("images/" + fileName);
+
+			// ファイル書き込み
 			Files.write(savePath, file.getBytes());
 		}
 
 		artistRepository.save(artist);
+	}
+
+	// ファイル名から拡張子を取り除いた部分を返す
+	private String getFileNameWithoutExtension(String fileName) {
+		int dotIndex = fileName.lastIndexOf('.');
+		return (dotIndex == -1) ? fileName : fileName.substring(0, dotIndex);
+	}
+
+	// ファイル名から拡張子のみを返す
+	private String getFileExtension(String fileName) {
+		int dotIndex = fileName.lastIndexOf('.');
+		return (dotIndex == -1) ? "" : fileName.substring(dotIndex + 1);
 	}
 
 	// IDでアーティスト検索

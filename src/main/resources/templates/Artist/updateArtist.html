@@ -2,64 +2,98 @@
 <html lang="ja">
 
 <head>
-    <meta charset="UTF-8">
-    <title>アーティスト更新</title>
+	<meta charset="UTF-8">
+	<title>アーティスト更新</title>
 
-    <!-- CSS -->
-    <link th:href="@{/webjars/bootstrap/5.3.5/css/bootstrap.min.css}" rel="stylesheet" />
-    <link th:href="@{/css/app.css}" rel="stylesheet" />
+	<!-- Bootstrap CSS -->
+	<link th:href="@{/webjars/bootstrap/5.3.5/css/bootstrap.min.css}" rel="stylesheet" />
+	<link th:href="@{/css/app.css}" rel="stylesheet" />
 
-    <!-- JavaScript -->
-    <script th:src="@{/webjars/bootstrap/5.3.5/js/bootstrap.bundle.min.js}" defer></script>
-    <script th:src="@{/js/app.js}" defer></script>
+	<!-- JavaScript -->
+	<script th:src="@{/webjars/bootstrap/5.3.5/js/bootstrap.bundle.min.js}" defer></script>
+	<script th:src="@{/js/app.js}" defer></script>
+
+	<style>
+		body {
+			background-color: #f8f9fa;
+		}
+
+		.card {
+			border-radius: 1rem;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+		}
+
+		.form-label {
+			font-weight: 600;
+		}
+
+		.img-preview {
+			max-width: 150px;
+			height: auto;
+			border-radius: 0.5rem;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+			margin-bottom: 1rem;
+		}
+	</style>
 </head>
 
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center mb-4">アーティスト更新フォーム</h1>
+	<div class="container my-5">
+		<div class="card p-4 mx-auto" style="max-width: 700px;">
+			<h2 class="text-center mb-4">🎵 アーティスト更新フォーム</h2>
 
-        <form th:action="@{'/artists/' + ${artist.artistId}}"
-              th:object="${artist}"
-              method="post"
-              enctype="multipart/form-data"
-              class="mx-auto"
-              style="max-width: 600px;">
+			<form th:action="@{'/artists/' + ${artist.artistId}}" th:object="${artist}" method="post"
+				enctype="multipart/form-data" novalidate>
 
-            <!-- アーティストID（hidden） -->
-            <input type="hidden" th:field="*{artistId}" />
+				<!-- アーティストID（hidden） -->
+				<input type="hidden" th:field="*{artistId}" />
 
-            <!-- アーティスト名 -->
-            <div class="mb-3">
-                <label for="artistName" class="form-label">アーティスト名</label>
-                <input type="text" th:field="*{artistName}" class="form-control" id="artistName" />
-                <div th:if="${#fields.hasErrors('artistName')}" th:errors="*{artistName}" class="form-text text-danger"></div>
-            </div>
+				<!-- アーティスト名 -->
+				<div class="mb-3">
+					<label for="artistName" class="form-label">アーティスト名</label>
+					<input type="text" th:field="*{artistName}" class="form-control" id="artistName" />
+					<div th:if="${#fields.hasErrors('artistName')}" th:errors="*{artistName}"
+						class="form-text text-danger"></div>
+				</div>
 
-            <!-- アーティスト名(読み) -->
-            <div class="mb-3">
-                <label for="artistHiraganaName" class="form-label">アーティスト読み</label>
-                <input type="text" th:field="*{artistHiraganaName}" class="form-control" id="artistHiraganaName" />
-                <div th:if="${#fields.hasErrors('artistHiraganaName')}" th:errors="*{artistHiraganaName}" class="form-text text-danger"></div>
-            </div>
+				<!-- アーティスト名(読み) -->
+				<div class="mb-3">
+					<label for="artistHiraganaName" class="form-label">アーティスト名（読み）</label>
+					<input type="text" th:field="*{artistHiraganaName}" class="form-control" id="artistHiraganaName" />
+					<div th:if="${#fields.hasErrors('artistHiraganaName')}" th:errors="*{artistHiraganaName}"
+						class="form-text text-danger"></div>
+				</div>
 
-            <!-- 公式HP -->
-            <div class="mb-3">
-                <label for="artistArtUrl" class="form-label">公式HP</label>
-                <input type="text" th:field="*{artistArtUrl}" class="form-control" id="artistArtUrl" />
-            </div>
+				<!-- 公式HP -->
+				<div class="mb-3">
+					<label for="artistArtUrl" class="form-label">公式HP</label>
+					<input type="url" th:field="*{artistArtUrl}" class="form-control" id="artistArtUrl"
+						placeholder="https://example.com" />
+				</div>
 
-            <!-- 画像アップロード -->
-            <div class="mb-3">
-                <label for="inputFile" class="form-label">アーティスト画像</label>
-                <input type="file" class="form-control" id="inputFile" name="artistCover" />
-            </div>
+				<!-- 既存画像の表示 -->
+				<div class="mb-3 text-center">
+					<label class="form-label d-block">現在の画像</label>
+					<img th:if="${artist.artistPhoto != null}" th:src="@{'/' + ${artist.artistPhoto}}"
+						class="img-preview" alt="現在の画像" />
+					<div th:if="${artist.artistPhoto == null}" class="text-muted">画像は登録されていません</div>
+				</div>
 
-            <!-- 更新ボタン -->
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary">更新する</button>
-            </div>
-        </form>
-    </div>
+				<!-- 画像アップロード -->
+				<div class="mb-3">
+					<label for="inputFile" class="form-label">新しいアーティスト画像をアップロード</label>
+					<input type="file" class="form-control" id="inputFile" name="artistCover" />
+				</div>
+
+				<!-- 更新ボタン -->
+				<div class="text-center">
+					<button type="submit" class="btn btn-primary btn-lg px-4">
+						<i class="fas fa-save me-2"></i>更新する
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
 </body>
 
 </html>

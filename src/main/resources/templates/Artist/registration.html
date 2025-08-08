@@ -2,64 +2,116 @@
 <html lang="ja">
 
 <head>
-    <meta charset="UTF-8">
-    <title>アーティスト新規登録</title>
+	<meta charset="UTF-8">
+	<title>アーティスト新規登録</title>
 
-    <!-- CSS -->
-    <link th:href="@{/webjars/bootstrap/5.3.5/css/bootstrap.min.css}" rel="stylesheet" />
-    <link th:href="@{/css/app.css}" rel="stylesheet" />
+	<!-- Bootstrap CSS -->
+	<link th:href="@{/webjars/bootstrap/5.3.5/css/bootstrap.min.css}" rel="stylesheet" />
 
-    <!-- JavaScript -->
-    <script th:src="@{/webjars/bootstrap/5.3.5/js/bootstrap.bundle.min.js}" defer></script>
-    <script th:src="@{/js/app.js}" defer></script>
+	<!-- Font Awesome（アイコン用） -->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+	<!-- カスタムCSS -->
+	<link th:href="@{/css/app.css}" rel="stylesheet" />
+
+	<!-- Bootstrap JS -->
+	<script th:src="@{/webjars/bootstrap/5.3.5/js/bootstrap.bundle.min.js}" defer></script>
+	<script th:src="@{/js/app.js}" defer></script>
+
+	<style>
+		body {
+			background: #f4f6f9;
+		}
+
+		.card {
+			border: none;
+			border-radius: 1rem;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+		}
+
+		.form-control:focus {
+			box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+			border-color: #80bdff;
+		}
+
+		.form-icon {
+			position: absolute;
+			left: 15px;
+			top: 50%;
+			transform: translateY(-50%);
+			color: #6c757d;
+		}
+
+		.input-group>.form-control {
+			padding-left: 2.5rem;
+		}
+	</style>
 </head>
 
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center mb-4">アーティスト新規登録</h1>
+	<div class="container py-5">
+		<div class="row justify-content-center">
+			<div class="col-lg-8">
+				<div class="card p-4">
+					<h2 class="text-center mb-4">🎵 アーティスト新規登録</h2>
 
-        <form method="post"
-              th:action="@{/artists}"
-              th:object="${artist}"
-              enctype="multipart/form-data"
-              class="mx-auto"
-              style="max-width: 600px;">
+					<form method="post" th:action="@{/artists}" th:object="${artist}" enctype="multipart/form-data"
+						novalidate>
 
-            <!-- アーティスト名 -->
-            <div class="mb-3">
-                <label for="artistName" class="form-label">アーティスト名</label>
-                <input type="text" th:field="*{artistName}" id="artistName" class="form-control" />
-                <div th:if="${#fields.hasErrors('artistName')}" th:errors="*{artistName}" class="form-text text-danger"></div>
-            </div>
+						<!-- アーティスト名 -->
+						<div class="mb-3 position-relative">
+							<label for="artistName" class="form-label">アーティスト名</label>
+							<div class="input-group">
+								<span class="form-icon"><i class="fas fa-user"></i></span>
+								<input type="text" th:field="*{artistName}" id="artistName" class="form-control" />
+							</div>
+							<div th:if="${#fields.hasErrors('artistName')}" th:errors="*{artistName}"
+								class="form-text text-danger"></div>
+						</div>
 
-            <!-- アーティスト名(読み) -->
-            <div class="mb-3">
-                <label for="artistHiraganaName" class="form-label">アーティスト名(読み)</label>
-                <input type="text" th:field="*{artistHiraganaName}" id="artistHiraganaName" class="form-control" />
-                <div th:if="${#fields.hasErrors('artistHiraganaName')}" th:errors="*{artistHiraganaName}" class="form-text text-danger"></div>
-            </div>
+						<!-- アーティスト名(読み) -->
+						<div class="mb-3 position-relative">
+							<label for="artistHiraganaName" class="form-label">アーティスト名(読み)</label>
+							<div class="input-group">
+								<span class="form-icon"><i class="fas fa-font"></i></span>
+								<input type="text" th:field="*{artistHiraganaName}" id="artistHiraganaName"
+									class="form-control" />
+							</div>
+							<div th:if="${#fields.hasErrors('artistHiraganaName')}" th:errors="*{artistHiraganaName}"
+								class="form-text text-danger"></div>
+						</div>
 
-            <!-- 公式HP -->
-            <div class="mb-3">
-                <label for="artistArtUrl" class="form-label">公式HP</label>
-                <input type="text" th:field="*{artistArtUrl}" id="artistArtUrl" class="form-control" />
-            </div>
+						<!-- 公式HP -->
+						<div class="mb-3 position-relative">
+							<label for="artistArtUrl" class="form-label">公式HP</label>
+							<div class="input-group">
+								<span class="form-icon"><i class="fas fa-globe"></i></span>
+								<input type="url" th:field="*{artistArtUrl}" id="artistArtUrl" class="form-control"
+									placeholder="https://example.com" />
+							</div>
+						</div>
 
-            <!-- アーティスト画像 -->
-            <div class="mb-3">
-                <label for="inputFile" class="form-label">アーティスト画像</label>
-                <input type="file" class="form-control" id="inputFile" name="artistCover" />
-            </div>
+						<!-- アーティスト画像 -->
+						<div class="mb-3">
+							<label for="inputFile" class="form-label">アーティスト画像</label>
+							<input type="file" class="form-control" id="inputFile" name="artistCover" />
+						</div>
 
-            <!-- アーティストID（hidden） -->
-            <input type="hidden" th:field="*{artistId}" />
+						<!-- アーティストID（hidden） -->
+						<input type="hidden" th:field="*{artistId}" />
 
-            <!-- 登録ボタン -->
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary">登録する</button>
-            </div>
-        </form>
-    </div>
+						<!-- 登録ボタン -->
+						<div class="text-center mt-4">
+							<button type="submit" class="btn btn-primary btn-lg px-5 shadow">
+								<i class="fas fa-plus-circle me-2"></i>登録する
+							</button>
+						</div>
+
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 
 </html>
