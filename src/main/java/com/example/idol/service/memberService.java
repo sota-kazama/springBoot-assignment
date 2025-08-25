@@ -23,11 +23,6 @@ public class MemberService {
 		this.memberRepository = memberRepository;
 	}
 
-	// メンバー保存
-	public void save(Member member) {
-		memberRepository.save(member);
-	}
-
 	public void save(Member member, MultipartFile file) throws IOException {
 		if (file != null && !file.isEmpty()) {
 			String originalFileName = file.getOriginalFilename();
@@ -44,7 +39,8 @@ public class MemberService {
 
 			// 重複がある場合、ファイル名を変更していく（例: image(1).jpg）
 			while (Files.exists(savePath)) {
-				String nameWithoutExt = getFileNameWithoutExtension(originalFileName);
+				String nameWithoutExt = getFileNameWithoutExtension
+						(originalFileName);
 				String extension = getFileExtension(originalFileName);
 				fileName = nameWithoutExt + "(" + count + ")." + extension;
 				savePath = directory.resolve(fileName);
@@ -60,6 +56,7 @@ public class MemberService {
 
 		memberRepository.save(member);
 	}
+
 
 	// ファイル名から拡張子を取り除いた部分を返す
 	private String getFileNameWithoutExtension(String fileName) {

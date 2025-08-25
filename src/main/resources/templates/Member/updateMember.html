@@ -1,54 +1,144 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
 	<meta charset="UTF-8">
 	<title th:text="${title}">メンバー情報更新</title>
+
+	<!-- Bootstrap CSS -->
 	<link th:href="@{/webjars/bootstrap/5.3.5/css/bootstrap.min.css}" rel="stylesheet" />
+	<!-- Font Awesome（アイコン用） -->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+	<!-- カスタムCSS -->
 	<link th:href="@{/css/app.css}" rel="stylesheet" />
+	<!-- JS -->
 	<script th:src="@{/webjars/bootstrap/5.3.5/js/bootstrap.bundle.min.js}" defer></script>
 	<script th:src="@{/js/app.js}" defer></script>
+
+	<style>
+		body {
+			background: #f4f6f9;
+		}
+
+		.card {
+			border: none;
+			border-radius: 1rem;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+		}
+
+		.form-control:focus {
+			box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+			border-color: #80bdff;
+		}
+
+		.form-icon {
+			position: absolute;
+			left: 15px;
+			top: 50%;
+			transform: translateY(-50%);
+			color: #6c757d;
+		}
+
+		.input-group>.form-control {
+			padding-left: 2.5rem;
+		}
+
+		.artist-img {
+			width: 150px;
+			height: 150px;
+			object-fit: cover;
+			border-radius: 50%;
+			box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+			margin: 0 auto 1rem auto;
+			display: block;
+		}
+	</style>
 </head>
 
 <body>
-	<div class="container mt-5">
-		<h1 class="text-center mb-4">メンバー情報更新</h1>
+	<div class="container py-5">
+		<div class="row justify-content-center">
+			<div class="col-lg-8">
+				<div class="card p-4">
+					<h2 class="text-center mb-4">👤 メンバー情報更新</h2>
 
-		<form method="post" th:action="@{/members}" th:object="${member}" class="mx-auto" style="max-width: 600px;">
-			
-			<input type="hidden" th:field="*{memberId}" />
+					<form th:action="@{'/members/' + ${member.memberId}}" th:object="${member}" method="post"
+						enctype="multipart/form-data" novalidate>
 
-			<div class="mb-3">
-				<label for="memberName" class="form-label">メンバー名</label>
-				<input type="text" th:field="*{memberName}" id="memberName" class="form-control" />
-				<div th:if="${#fields.hasErrors('memberName')}" th:errors="*{memberName}" class="form-text text-danger"></div>
+
+						<input type="hidden" th:field="*{memberId}" />
+
+						<!-- メンバー名 -->
+						<div class="mb-3 position-relative">
+							<label for="memberName" class="form-label">メンバー名</label>
+							<div class="input-group">
+								<span class="form-icon"><i class="fas fa-user"></i></span>
+								<input type="text" th:field="*{memberName}" id="memberName" class="form-control" />
+							</div>
+							<div th:if="${#fields.hasErrors('memberName')}" th:errors="*{memberName}"
+								class="form-text text-danger"></div>
+						</div>
+
+						<!-- メンバー名(読み) -->
+						<div class="mb-3 position-relative">
+							<label for="memberHiraganaName" class="form-label">メンバー名(読み)</label>
+							<div class="input-group">
+								<span class="form-icon"><i class="fas fa-font"></i></span>
+								<input type="text" th:field="*{memberHiraganaName}" id="memberHiraganaName"
+									class="form-control" />
+							</div>
+							<div th:if="${#fields.hasErrors('memberHiraganaName')}" th:errors="*{memberHiraganaName}"
+								class="form-text text-danger"></div>
+						</div>
+
+						<!-- 誕生日 -->
+						<div class="mb-3 position-relative">
+							<label for="memberBirthday" class="form-label">誕生日</label>
+							<div class="input-group">
+								<span class="form-icon"><i class="fas fa-calendar-day"></i></span>
+								<input type="date" th:field="*{memberBirthday}" id="memberBirthday"
+									class="form-control" />
+							</div>
+							<div th:if="${#fields.hasErrors('memberBirthday')}" th:errors="*{memberBirthday}"
+								class="form-text text-danger"></div>
+						</div>
+
+						<!-- アーティスト選択 -->
+						<div class="mb-4 position-relative">
+							<label for="artist" class="form-label">アーティスト</label>
+							<div class="input-group">
+								<span class="form-icon"><i class="fas fa-music"></i></span>
+								<select th:field="*{artist.artistId}" class="form-select" id="artist">
+									<option value="" disabled selected>選択してください</option>
+									<option th:each="artist : ${artists}" th:value="${artist.artistId}"
+										th:text="${artist.artistName}"></option>
+								</select>
+							</div>
+						</div>
+
+						<!-- メンバー画像 -->
+						<div class="mb-3">
+							<label for="inputFile" class="form-label">現在のメンバー画像</label>
+							<img th:src="@{'/' + ${member.memberPhoto}}" alt="メンバー画像" class="artist-img" />
+
+							<label for="inputFile" class="form-label">メンバー画像</label>
+							<input type="file" class="form-control" id="inputFile" name="memberPhotoFile" />
+						</div>
+
+
+
+						<!-- 更新ボタン -->
+						<div class="text-center mt-4">
+							<button type="submit" class="btn btn-primary btn-lg px-5 shadow">
+								<i class="fas fa-save me-2"></i>更新する
+							</button>
+						</div>
+					</form>
+
+				</div>
 			</div>
-
-			<div class="mb-3">
-				<label for="memberHiraganaName" class="form-label">メンバー名(読み)</label>
-				<input type="text" th:field="*{memberHiraganaName}" id="memberHiraganaName" class="form-control" />
-				<div th:if="${#fields.hasErrors('memberHiraganaName')}" th:errors="*{memberHiraganaName}" class="form-text text-danger"></div>
-			</div>
-
-			<div class="mb-3">
-				<label for="memberBirthday" class="form-label">誕生日</label>
-				<input type="date" th:field="*{memberBirthday}" id="memberBirthday" class="form-control" />
-				<div th:if="${#fields.hasErrors('memberBirthday')}" th:errors="*{memberBirthday}" class="form-text text-danger"></div>
-			</div>
-
-			<div class="mb-4">
-				<label for="artist" class="form-label">アーティスト</label>
-				<select th:field="*{artist.artistId}" class="form-select" id="artist">
-					<option value="" disabled selected>選択してください</option>
-					<option th:each="artist : ${artists}" th:value="${artist.artistId}" th:text="${artist.artistName}"></option>
-				</select>
-			</div>
-
-			
-
-			<div class="text-center">
-				<button type="submit" class="btn btn-primary">更新する</button>
-			</div>
-		</form>
+		</div>
 	</div>
 </body>
+
 </html>

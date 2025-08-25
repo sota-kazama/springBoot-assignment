@@ -50,7 +50,8 @@ public class ArtistService {
 
 			// 重複がある場合、ファイル名を変更していく（例: image(1).jpg）
 			while (Files.exists(savePath)) {
-				String nameWithoutExt = getFileNameWithoutExtension(originalFileName);
+				String nameWithoutExt = getFileNameWithoutExtension
+						(originalFileName);
 				String extension = getFileExtension(originalFileName);
 				fileName = nameWithoutExt + "(" + count + ")." + extension;
 				savePath = directory.resolve(fileName);

@@ -49,11 +49,13 @@
 						<th>メンバー名(読み)</th>
 						<th>誕生日</th>
 						<th>更新</th>
+						
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="member : ${artist.members}">
 						<td>
+							<img th:src="@{'/' + ${member.memberPhoto}}" alt="メンバー画像" class="artist-img" />
 							<div class="member-name" th:text="${member.memberName}"></div>
 							<div class="member-age" th:text="|(${member.memberAge}歳)|"></div>
 						</td>
@@ -67,6 +69,7 @@
 							</form>
 						</td>
 					</tr>
+
 				</tbody>
 			</table>
 		</div>
